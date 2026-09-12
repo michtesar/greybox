@@ -15,15 +15,14 @@ fn main() {
 
     let mut player = Player::new(Vector2 { x: 100.0, y: 100.0 }, 100.0);
 
-    let mut player_target: Option<Vector2>;
     while !rl.window_should_close() {
         let dt = rl.get_frame_time();
 
-        if rl.is_mouse_button_pressed(MouseButton::MOUSE_BUTTON_LEFT) {
-            player_target = Some(rl.get_mouse_position());
+        let player_target = if rl.is_mouse_button_pressed(MouseButton::MOUSE_BUTTON_LEFT) {
+            Some(rl.get_mouse_position())
         } else {
-            player_target = None;
-        }
+            None
+        };
 
         let mut d = rl.begin_drawing(&thread);
 
