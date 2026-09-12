@@ -1,4 +1,4 @@
-use raylib::prelude::*;
+use raylib::{ffi::Rectangle, prelude::*};
 
 pub struct Player {
     position: Vector2,
@@ -38,6 +38,14 @@ impl Player {
     }
 
     pub fn draw(&self, d: &mut RaylibDrawHandle<'_>) {
-        todo!()
+        let height = 80.0;
+        let width = 40.0;
+
+        let player_rect = Rectangle::new(self.position.x, self.position.y, width, height);
+        let player_origin = Vector2::new(width / 2.0, height);
+        let player_rotation = 0.0;
+        let player_color = Color::GREEN;
+
+        d.draw_rectangle_pro(player_rect, player_origin, player_rotation, player_color);
     }
 }
