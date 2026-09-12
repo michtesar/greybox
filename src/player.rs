@@ -14,11 +14,27 @@ enum PlayerState {
 
 impl Player {
     pub fn new(position: Vector2, speed: f32) -> Self {
-        todo!()
+        Player {
+            position,
+            speed,
+            state: PlayerState::Idle,
+        }
     }
 
     pub fn update(&mut self, dt: f32, click: Option<Vector2>) {
-        todo!()
+        if let Some(target) = click {
+            self.state = PlayerState::Walking { target }
+        }
+
+        match self.state {
+            PlayerState::Idle => {} // nothing to do waiting for the input
+            PlayerState::Walking { target } => {
+                self.position = self.position.move_towards(target, self.speed * dt);
+                if self.position == target {
+                    self.state = PlayerState::Idle;
+                }
+            }
+        }
     }
 
     pub fn draw(&self, d: &mut RaylibDrawHandle<'_>) {
