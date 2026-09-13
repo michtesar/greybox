@@ -1,4 +1,4 @@
-use raylib::{ffi::Rectangle, prelude::*};
+use raylib::prelude::*;
 
 pub struct Player {
     position: Vector2,
