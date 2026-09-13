@@ -18,7 +18,7 @@ use raylib::ffi::Vector2;
 * out-of-bounds coordinate.
 */
 #[derive(Debug)]
-struct View {
+pub struct View {
     scale: f32,
     offset: Vector2,
     scene_resolution: Vector2,
@@ -144,6 +144,63 @@ mod tests {
         let point_in_bar = Vector2 { x: 0.0, y: 240.0 };
 
         assert_eq!(view.screen_to_scene(point_in_bar), None);
+    }
+
+    #[test]
+    fn scene_center_maps_to_window_center() {
+        // Regardless of window size/aspect ratio, the centre of the scene
+        // must always land exactly on the centre of the window.
+        for window_resolution in [
+            Vector2 {
+                x: 1280.0,
+                y: 960.0,
+            }, // no bars
+            Vector2 {
+                x: 1000.0,
+                y: 480.0,
+            }, // pillarbox
+            Vector2 {
+                x: 640.0,
+                y: 1200.0,
+            }, // letterbox
+        ] {
+            let view = View::new(window_resolution, Vector2 { x: 640.0, y: 480.0 });
+            let scene_center = Vector2 { x: 320.0, y: 240.0 };
+            let window_center = Vector2 {
+                x: window_resolution.x / 2.0,
+                y: window_resolution.y / 2.0,
+            };
+
+            assert_vector2_approx_eq(view.scene_to_screen(scene_center), window_center);
+        }
+    }
+
+    #[test]
+    fn very_wide_window_produces_pillarbox_only() {
+        let view = View::new(
+            Vector2 {
+                x: 2000.0,
+                y: 100.0,
+            },
+            Vector2 { x: 640.0, y: 480.0 },
+        );
+
+        assert!(view.offset.x > 0.0);
+        assert!(view.offset.y.abs() < 1e-4);
+    }
+
+    #[test]
+    fn very_tall_window_produces_letterbox_only() {
+        let view = View::new(
+            Vector2 {
+                x: 100.0,
+                y: 2000.0,
+            },
+            Vector2 { x: 640.0, y: 480.0 },
+        );
+
+        assert!(view.offset.y > 0.0);
+        assert!(view.offset.x.abs() < 1e-4);
     }
 
     #[test]
