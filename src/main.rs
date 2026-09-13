@@ -7,6 +7,7 @@ fn main() {
         .size(640, 480)
         .title("Greybox Demo")
         .vsync()
+        .resizable()
         .build();
 
     rl.set_target_fps(120);
