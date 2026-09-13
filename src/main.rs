@@ -1,8 +1,6 @@
 use raylib::prelude::*;
 
-use crate::player::Player;
-
-pub mod player;
+use greybox::player::Player;
 
 fn main() {
     let (mut rl, thread) = raylib::init()
