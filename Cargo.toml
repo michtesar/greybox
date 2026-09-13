@@ -3,6 +3,17 @@ name = "greybox"
 version = "0.1.0"
 edition = "2024"
 license = "MIT"
+# Without this, `cargo run` is ambiguous once src/bin/editor.rs exists.
+default-run = "greybox"
 
 [dependencies]
 raylib = "6.0"
+
+# Ship size: strip is by far the biggest win (debug symbols are usually more
+# than half the file), LTO the second. Deliberately not opt-level = "z" — a few
+# hundred kB is not worth the runtime cost in a game.
+[profile.release]
+lto = true
+codegen-units = 1
+panic = "abort"
+strip = true
