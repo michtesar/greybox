@@ -35,4 +35,13 @@ impl View {
         };
         View { scale, offset }
     }
+
+    pub fn scene_to_screen(&self, point: Vector2) -> Vector2 {
+        Vector2 {
+            x: (point.x * self.scale) + self.offset.x,
+            y: (point.y * self.scale) + self.offset.y,
+        }
+    }
+
+    pub fn screen_to_scene(&self, point: Vector2) -> Option<Vector2> {}
 }
